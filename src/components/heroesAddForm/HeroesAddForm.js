@@ -39,6 +39,10 @@ const HeroesAddForm = () => {
             .then(data => console.log(data, 'Created'))
             .then(dispatch(heroCreated(newHero)))
             .catch(err => console.log(err))
+
+        setHeroName('');
+        setHeroText('');
+        setHeroElement('');
     }
 
     const renderFilters = (filters) => {

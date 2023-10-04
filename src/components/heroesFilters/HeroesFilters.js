@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 
-import { filtersFetching, filtersFetched, filtersFetchingError } from "../../actions";
+import { filtersFetching, filtersFetched, filtersFetchingError, activeFilteredChanged } from "../../actions";
 import { useHttp } from "../../hooks/http.hook";
 
 import Spinner from "../spinner/Spinner";
@@ -41,7 +41,11 @@ const HeroesFilters = () => {
                 'active': name === activeFilter
             });
 
-            return <button key={name} className={btnClass}>{label}</button>
+            return <button 
+                        key={name} 
+                        className={btnClass}
+                        onClick={() => dispatch(activeFilteredChanged(name))}
+                        >{label}</button>
         });
     }
 
@@ -52,11 +56,6 @@ const HeroesFilters = () => {
             <div className="card-body">
                 <p className="card-text">Отфильтруйте героев по элементам</p>
                 <div className="btn-group">
-                    {/* <button className="btn btn-outline-dark active">Все</button>
-                    <button className="btn btn-danger">Огонь</button>
-                    <button className="btn btn-primary">Вода</button>
-                    <button className="btn btn-success">Ветер</button>
-                    <button className="btn btn-secondary">Земля</button> */}
                     {elements}
                 </div>
             </div>
