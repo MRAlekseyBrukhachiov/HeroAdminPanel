@@ -3,7 +3,7 @@ import { useHttp } from "../../hooks/http.hook";
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from "react";
 
-import { heroCreated } from "../../actions";
+import { heroCreated } from "../heroesList/heroesSlice";
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
