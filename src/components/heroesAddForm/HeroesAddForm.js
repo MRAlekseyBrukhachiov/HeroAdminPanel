@@ -2,8 +2,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHttp } from "../../hooks/http.hook";
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from "react";
+import store from "../../store";
 
 import { heroCreated } from "../heroesList/heroesSlice";
+import { selectAll } from "../heroesFilters/filtersSlice";
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -21,7 +23,8 @@ const HeroesAddForm = () => {
     const [heroText, setHeroText] = useState('');
     const [heroElement, setHeroElement] = useState('');
 
-    const {filters} = useSelector(state => state.filters);
+    const {filtersLoadingStatus} = useSelector(state => state.filters);
+    const filters = selectAll(store.getState());
     const dispatch = useDispatch();
     const {request} = useHttp();
 
@@ -45,14 +48,24 @@ const HeroesAddForm = () => {
         setHeroElement('');
     }
 
-    const renderFilters = (filters) => {
-        return filters.map(({name, label}) => {
-            if (name === 'all') return null;
-            return <option key={name} value={name}>{label}</option>
-        });
+    const renderFilters = (filters, status) => {
+        if (status === "loading") {
+            return <option>Загрузка элементов</option>
+        } else if (status === "error") {
+            return <option>Ошибка загрузки</option>
+        }
+
+        if (filters && filters.length > 0 ) {
+            return filters.map(({name, label}) => {
+                // eslint-disable-next-line
+                if (name === 'all')  return;
+
+                return <option key={name} value={name}>{label}</option>
+            });
+        }
     }
 
-    const elements = renderFilters(filters);
+    const elements = renderFilters(filters, filtersLoadingStatus);
 
     return (
         <form className="border p-4 shadow-lg rounded" onSubmit={(e) => onSubmit(e)}>
